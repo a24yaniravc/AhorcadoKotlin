@@ -3,6 +3,7 @@ var guardado = StringBuilder("")
 var fallos = 0
 
 fun jugar(palabrasPosibles: List<String>, intentosMax: Int) {
+    // Elegimos una palabra aleatoria
     val elegido = palabrasPosibles.random()
     val adivinado = StringBuilder("")
 
@@ -14,17 +15,18 @@ fun jugar(palabrasPosibles: List<String>, intentosMax: Int) {
     guardado = adivinado
     palabraAdivinada = adivinado.toString()
 
-    // Bucle principal del juego
-    while (fallos < intentosMax) {
+    // Bucle principal
+    while (fallos < intentosMax && guardado.toString()!=elegido) {
         println("-------------------------------")
-        println("Palabra: " + guardado)
+        println("Palabra: $guardado")
         print("Introduce una letra o palabra: ")
-        val letra = readln().toLowerCase()
 
-        // Comprobamos si la entrada es una letra o palabra
+        val letra = readln().lowercase()
+
+        // Comprobamos si la entrada es lógica + si es palabra o letra
         if (letra != "" && letra[0] in 'a'..'z' && letra.length <= elegido.length) {
             if (letra.length == 1) {
-                intento(elegido, letra[0])
+                intento(elegido, letra[0]) // Comprueba la letra
             } else if (letra == elegido) {
                 println("¡Buen trabajo! Has adivinado la palabra: $elegido")
                 break
@@ -38,7 +40,7 @@ fun jugar(palabrasPosibles: List<String>, intentosMax: Int) {
         }
 
         // Comprobamos si la palabra fue adivinada
-        if (palabraAdivinada == elegido) {
+        if (guardado.toString() == elegido) {
             println("¡Buen trabajo! Has adivinado la palabra: $elegido")
             break
         }
@@ -51,6 +53,7 @@ fun jugar(palabrasPosibles: List<String>, intentosMax: Int) {
 }
 
 fun intento(elegido: String, letra: Char) {
+    // Comprobamos
     if (elegido.contains(letra)) {
         println("¡Correcto!")
         val nuevaPalabra = palabraAdivinada.toCharArray()
@@ -62,10 +65,10 @@ fun intento(elegido: String, letra: Char) {
             }
         }
 
-        // Asignamos la nueva palabra adivinada
+        // Asignamos la nueva palabra adivinada (String)
         palabraAdivinada = String(nuevaPalabra)
 
-        // Actualizamos el StringBuilder guardado
+        // Actualizamos el StringBuilder guardado (StringBuilder)
         guardado = StringBuilder(palabraAdivinada)
     } else {
         println("¡Incorrecto!")
@@ -78,11 +81,13 @@ fun main() {
     // Java //
     val rm = ReproductorMidi("pugnodollari.mid")
     println("Cargando juego...")
-    Thread.sleep(20)
+    Thread.sleep(20000)
 
     // Kotlin //
     val palabrasPosibles = listOf("platano", "manzana", "pera", "mandarina", "kiwi", "naranja")
     val intentosMax = 7
 
     jugar(palabrasPosibles, intentosMax)
+    Thread.sleep(1000)
+    rm.cerrar()
 }
